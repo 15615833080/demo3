@@ -10,9 +10,12 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.demo3.R;
 import com.example.demo3.adapter.MessageListAdapter;
+import com.example.demo3.adapter.RecyclerAdapter;
 import com.example.demo3.bean.MyMessage;
 import com.example.demo3.presenter.MyMessagePresenter;
 import com.example.demo3.presenter.MyMessagePresenterImpl;
@@ -25,6 +28,7 @@ public class BaseFragment extends Fragment implements MyMessageView{
     private static final String TAG = "PoliceFragment";
     private MyMessagePresenter myMessagePresenter;
     private View view;
+    private RecyclerView recyclerView;
     private ListView listView;
     private List<MyMessage> mMessageList;
     private Context mContext;
@@ -40,8 +44,14 @@ public class BaseFragment extends Fragment implements MyMessageView{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_police, container, false);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        linearLayoutManager.setReverseLayout(false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         //findview
-        listView = view.findViewById(R.id.list_view);
+        //listView = view.findViewById(R.id.list_view);
         //init
         myMessagePresenter = new MyMessagePresenterImpl(this);
         mMessageList = new ArrayList<>();
@@ -54,7 +64,13 @@ public class BaseFragment extends Fragment implements MyMessageView{
     @Override
     public void showMessage(List<MyMessage> myMessageList) {
         mMessageList = myMessageList;
-        MessageListAdapter adapter = new MessageListAdapter(mContext,R.layout.item_listview,myMessageList);
-        listView.setAdapter(adapter);
+
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(mContext, myMessageList);
+        recyclerView.setAdapter(recyclerAdapter);
+
+
+
+        /*MessageListAdapter adapter = new MessageListAdapter(mContext,R.layout.item_listview,myMessageList);
+        listView.setAdapter(adapter);*/
     }
 }

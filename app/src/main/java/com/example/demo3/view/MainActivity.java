@@ -3,6 +3,7 @@ package com.example.demo3.view;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Matrix;
 import android.os.Bundle;
 
 import com.example.demo3.R;
@@ -29,5 +30,6 @@ public class MainActivity extends AppCompatActivity {
         mPagerAdapter = new SlideSlidePagerAdapter(getSupportFragmentManager(),MainActivity.this);
         mPager.setAdapter(mPagerAdapter);
         mNavigationTabStrip.setViewPager(mPager,0);
+
     }
 }

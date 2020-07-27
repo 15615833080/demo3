@@ -23,6 +23,7 @@ public class MyMessagePresenterImpl extends Activity implements MyMessagePresent
     MyMessageModel myMessageModel;
     public List<MyMessage> myMessageList;
     public static final int SHOW = 1;
+    //子线程中发出handler，由主线程接受
     MyHandler myHandler;
     public MyMessagePresenterImpl(MyMessageView myMessageView) {
         this.myMessageView = myMessageView;
@@ -54,7 +55,7 @@ public class MyMessagePresenterImpl extends Activity implements MyMessagePresent
         for(MyMessage message : myMessageList){
             LogUtil.d("MainActivity", message.toString());
         }
-        Message msg = new Message();
+        Message msg = Message.obtain();
         msg.what = SHOW;
         myHandler.sendMessage(msg);
     }
