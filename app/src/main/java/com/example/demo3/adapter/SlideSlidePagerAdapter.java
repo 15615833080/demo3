@@ -17,20 +17,22 @@ import static com.example.demo3.utils.Constant.WEB_SITE;
 public class SlideSlidePagerAdapter extends FragmentPagerAdapter {
 
     public static final int INT = 2;
-    public String adress;
     public Context mContext;
     public SlideSlidePagerAdapter(@NonNull FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
     }
 
+
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        if(position == 0)
-            return new PoliceFragment(mContext,WEB_SITE + P_NAME);
-        else
-            return new LovelyFragment(mContext, WEB_SITE + L_NAME);
+        if(position == 0){
+            return new PoliceFragment();
+        }
+        else{
+            return new LovelyFragment();
+        }
     }
 
     @Override

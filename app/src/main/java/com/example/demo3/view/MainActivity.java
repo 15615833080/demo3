@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.example.demo3.R;
 import com.example.demo3.adapter.SlideSlidePagerAdapter;
+import com.example.demo3.utils.LogUtil;
 import com.gigamole.navigationtabstrip.NavigationTabStrip;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        LogUtil.d("MyMessagePresenterImpl", "thread" + Thread.currentThread().getName());
 
         //findview
         mPager = findViewById(R.id.pager);
@@ -32,4 +34,5 @@ public class MainActivity extends AppCompatActivity {
         mNavigationTabStrip.setViewPager(mPager,0);
 
     }
+
 }

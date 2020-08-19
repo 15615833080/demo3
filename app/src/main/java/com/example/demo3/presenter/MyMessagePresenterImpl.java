@@ -2,12 +2,16 @@ package com.example.demo3.presenter;
 
 import android.app.Activity;
 import android.os.Message;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.demo3.adapter.RecyclerAdapter;
 import com.example.demo3.bean.MyMessage;
 import com.example.demo3.model.MyMessageModel;
 import com.example.demo3.model.MyMessageModelImpl;
+import com.example.demo3.network.NetWork;
 import com.example.demo3.utils.LogUtil;
 import com.example.demo3.view.MyMessageView;
 import com.google.gson.Gson;
@@ -15,6 +19,14 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.example.demo3.utils.Constant.P_NAME;
 
 
 public class MyMessagePresenterImpl extends Activity implements MyMessagePresenter {
@@ -30,6 +42,30 @@ public class MyMessagePresenterImpl extends Activity implements MyMessagePresent
         initMyMessageModel();
         myHandler = new MyHandler();
     }
+
+
+    @Override
+    public void getData(String mAdress, RecyclerAdapter recyclerAdapter, Disposable disposable) {
+        NetWork instance = NetWork.getInstance();
+        disposable = instance.getMessageData()
+                .search(mAdress)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<MyMessage>>() {
+                    @Override
+                    public void accept(List<MyMessage> myMessages) throws Exception {
+                        recyclerAdapter.setMessages(myMessages);
+                        LogUtil.d("MyMessagePresenterImpl", "myMessages: + thread" + myMessages + Thread.currentThread().getName());
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        LogUtil.d("MyMessagePresenterImpl", "myMessages: false");
+                    }
+                });
+    }
+
+
 
     @Override
     public void initData(final String adress) {
@@ -59,6 +95,8 @@ public class MyMessagePresenterImpl extends Activity implements MyMessagePresent
         msg.what = SHOW;
         myHandler.sendMessage(msg);
     }
+
+
 
     private void initMyMessageModel() {
         myMessageModel = new MyMessageModelImpl(this);

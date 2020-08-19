@@ -2,6 +2,7 @@ package com.example.demo3.adapter;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.demo3.R;
 import com.example.demo3.bean.MyMessage;
+import com.example.demo3.utils.LogUtil;
 
 import java.util.List;
 
@@ -24,11 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private List<MyMessage> myMessageList;
     private MyViewHolder myViewHolder;
     private View view;
-
-    public RecyclerAdapter(Context context, List<MyMessage> objects) {
-        //mContext = context;
-        myMessageList = objects;
-    }
+    private MyMessage myMessage;
 
     /**
      * 创建并且返回ViewHolder
@@ -51,12 +49,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
      */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        MyMessage myMessage = myMessageList.get(position);
+        myMessage = myMessageList.get(position);
         Glide
                 .with(view)
                 .load(myMessage.getImageUrl())
                 .into(holder.picture);
         holder.description.setText(myMessage.getDesription());
+    }
+
+    public void setMessages(List<MyMessage> myMessageList){
+        this.myMessageList = myMessageList;
+        notifyDataSetChanged();
     }
 
     /**
@@ -65,7 +68,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
      */
     @Override
     public int getItemCount() {
-        return myMessageList.size();
+        return myMessageList == null ? 0 :myMessageList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -80,4 +83,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             description = itemView.findViewById(R.id.description);
         }
     }
+
 }
